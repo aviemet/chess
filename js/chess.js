@@ -3,8 +3,8 @@ var colors = ['b', 'w'];
 var pieces = []; 
 var tiles = [];
 var currTurnColor = "w";
-var history = [];
-var historyOffset = 0; // Should never be less than 0. 0 means latest play, positive value for previous plays
+var moves = [];
+var movesOffset = 0; // Should never be less than 0. 0 means latest play, positive value for previous plays
 var activeTiles;
 var showHints = false;
 
@@ -363,50 +363,55 @@ function takePiece(piece){
 	}
 }
 
+// TODO: change pieceTaken check from testing undefined to true/false test
 function logMove(piece, tile, pieceTaken){
-	var move = [];
-	move[0] = piece;
-	move[1] = getPiecePosition(piece);	// From tile
-	move[2] = tile;						// To tile
-	move[3] = piece.hasClass('first');
+	var move = {
+		piece: piece,
+		position: getPiecePosition(piece),
+		tile: tile,
+		first: piece.hasClass('first')
+	};
+	// move[0] = piece;
+	// move[1] = getPiecePosition(piece);	// From tile
+	// move[2] = tile;						// To tile
+	// move[3] = piece.hasClass('first');
 	if(typeof pieceTaken !== 'undefined'){
-		move[4] = pieceTaken;
+		move.taken = pieceTaken;
 	} else {
-		move[4] = typeof undefined;
+		move.taken = typeof undefined;
 	}
-	history.push(move);
-	//console.log(history);
-	historyOffset = 0;
+	moves.push(move);
+	movesOffset = 0;
 }
 
 function undo(){
-	if(historyOffset < (history.length)){
-		var i = history.length-1 - historyOffset;
-		var piece = history[i][0];
-		$(piece).appendTo($("td#"+history[i][1]));
-		if(history[i][3]){
+	if(movesOffset < (moves.length)){
+		var i = moves.length-1 - movesOffset;
+		var piece = moves[i].piece;
+		$(piece).appendTo($("td#"+moves[i].position));
+		if(moves[i].first){
 			piece.addClass('first');
 		}
-		if(history[i][4] !== 'undefined'){
-			$(history[i][4]).appendTo(history[i][2]).draggable('enable');
+		if(moves[i].taken !== 'undefined'){
+			$(moves[i].taken).appendTo(moves[i].tile).draggable('enable');
 		}
-		historyOffset++;
+		movesOffset++;
 		endTurn();
 	}
 }
 
 function redo(){
-	if(historyOffset < (history.length)){
-		var i = history.length-1 - historyOffset;
-		var piece = history[i][0];
-		$(piece).appendTo($("td#"+history[i][1]));
-		if(history[i][3]){
+	if(movesOffset < (moves.length)){
+		var i = moves.length-1 - movesOffset;
+		var piece = moves[i].piece;
+		$(piece).appendTo($("td#"+moves[i].position));
+		if(moves[i].first){
 			piece.addClass('first');
 		}
-		if(history[i][4] !== 'undefined'){
-			$(piece).appendTo($("td#"+history[i][2]));
+		if(moves[i].taken !== 'undefined'){
+			$(piece).appendTo($("td#"+moves[i].tile));
 		}
-		historyOffset--;
+		movesOffset--;
 		endTurn();
 	}
 }
