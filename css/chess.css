@@ -1,0 +1,47 @@
+@import "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css";
+/* line 1, ../scss/_style.scss */
+#wrapper {
+  width: 960px;
+  margin: 0 auto;
+}
+
+/* line 6, ../scss/_style.scss */
+#info {
+  width: 200px;
+  display: inline-block;
+  float: right;
+}
+
+/* line 12, ../scss/_style.scss */
+table, table * {
+  margin: 0;
+  padding: 0;
+  border-spacing: 0;
+}
+
+/* line 18, ../scss/_style.scss */
+#chess_board {
+  border: 1px solid black;
+}
+
+/* line 22, ../scss/_style.scss */
+#chess_board td {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #333;
+}
+
+/* line 28, ../scss/_style.scss */
+#chess_board td.black {
+  background: #444;
+}
+
+/* line 32, ../scss/_style.scss */
+.active {
+  border: 1px solid orange !important;
+}
+
+/* line 36, ../scss/_style.scss */
+.enabled {
+  background: #C66 !important;
+}
